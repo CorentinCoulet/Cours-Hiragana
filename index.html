@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apprentissage des Hiragana</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🈵 Apprentissage des Hiragana</h1>
+            <p>Maîtrisez les hiragana avec ces quiz interactifs</p>
+        </header>
+
+        <!-- Configuration du Quiz -->
+        <div class="config-section" id="configSection">
+            <h2>Configuration du Quiz</h2>
+            <div class="config-card">
+                <!-- Sélection du niveau de difficulté -->
+                <div class="config-row">
+                    <label>Niveau de difficulté :</label>
+                    <div class="difficulty-buttons">
+                        <button class="difficulty-btn" data-level="beginner">
+                            🌱 Débutant<br><small>Voyelles de base</small>
+                        </button>
+                        <button class="difficulty-btn active" data-level="intermediate">
+                            📚 Intermédiaire<br><small>Consonnes simples</small>
+                        </button>
+                        <button class="difficulty-btn" data-level="advanced">
+                            🎓 Avancé<br><small>Tous les hiragana</small>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pratique par famille -->
+                <div class="config-row">
+                    <label>Pratique ciblée :</label>
+                    <div class="family-checkboxes" id="familyCheckboxes">
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="all" id="allFamilies" checked>
+                                <span class="checkmark"></span>
+                                Tous les hiragana
+                            </label>
+                        </div>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="vowels">
+                                <span class="checkmark"></span>
+                                Voyelles (あ, い, う, え, お)
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="k-series">
+                                <span class="checkmark"></span>
+                                Série K (か, き, く, け, こ)
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="s-series">
+                                <span class="checkmark"></span>
+                                Série S (さ, し, す, せ, そ)
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="t-series">
+                                <span class="checkmark"></span>
+                                Série T (た, ち, つ, て, と)
+                            </label>
+                        </div>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="n-series">
+                                <span class="checkmark"></span>
+                                Série N (な, に, ぬ, ね, の)
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="h-series">
+                                <span class="checkmark"></span>
+                                Série H (は, ひ, ふ, へ, ほ)
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="m-series">
+                                <span class="checkmark"></span>
+                                Série M (ま, み, む, め, も)
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="y-series">
+                                <span class="checkmark"></span>
+                                Série Y (や, ゆ, よ)
+                            </label>
+                        </div>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="r-series">
+                                <span class="checkmark"></span>
+                                Série R (ら, り, る, れ, ろ)
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="w-series">
+                                <span class="checkmark"></span>
+                                Série W (わ, を, ん)
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="mistakes">
+                                <span class="checkmark"></span>
+                                Réviser mes erreurs
+                            </label>
+                        </div>
+                    </div>
+                    <small class="help-text">Cliquez pour sélectionner/désélectionner les familles à pratiquer</small>
+                </div>
+                
+                <div class="config-row">
+                    <label for="quizCount">Nombre d'hiragana dans le quiz :</label>
+                    <input type="number" id="quizCount" min="5" max="100" value="10">
+                    <small class="help-text">Si le nombre dépasse les hiragana disponibles, certains peuvent se répéter</small>
+                </div>
+
+                <!-- Mode de jeu -->
+                <div class="config-row">
+                    <label>Mode de jeu :</label>
+                    <div class="game-mode-buttons">
+                        <button class="game-mode-btn active" data-mode="normal">
+                            📝 Normal
+                        </button>
+                        <button class="game-mode-btn" data-mode="timed">
+                            ⏱️ Chronomètre
+                        </button>
+                        <button class="game-mode-btn" data-mode="survival">
+                            💪 Survie
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Options du mode chronomètre -->
+                <div class="config-row hidden" id="timedOptions">
+                    <label for="timeLimit">Temps par question (secondes) :</label>
+                    <input type="number" id="timeLimit" min="3" max="30" value="10">
+                </div>
+                
+                <button class="start-quiz-btn" id="startQuizBtn">Commencer le Quiz</button>
+            </div>
+        </div>
+
+        <!-- Section Quiz -->
+        <div class="quiz-section hidden" id="quizSection">
+            <div class="quiz-header">
+                <div class="quiz-progress">
+                    <span id="currentQuestion">1</span> / <span id="totalQuestions">10</span>
+                </div>
+                <div class="quiz-score">
+                    Score: <span id="score">0</span>
+                </div>
+                <div class="timer-display hidden" id="timerDisplay">
+                    ⏱️ <span id="timeRemaining">10</span>s
+                </div>
+                <div class="survival-streak hidden" id="survivalStreak">
+                    🔥 Série: <span id="streakCount">0</span>
+                </div>
+            </div>
+
+            <div class="quiz-card">
+                <div class="question-type" id="questionType">Hiragana → Romanji</div>
+                <div class="question" id="question">あ</div>
+                
+                <!-- Zone de choix multiples -->
+                <div class="multiple-choice" id="multipleChoice">
+                    <button class="choice-btn" data-choice="0"></button>
+                    <button class="choice-btn" data-choice="1"></button>
+                    <button class="choice-btn" data-choice="2"></button>
+                </div>
+                
+                <div class="feedback hidden" id="feedback"></div>
+            </div>
+
+            <div class="quiz-actions">
+                <button class="secondary-btn" id="skipQuestion">Passer</button>
+                <button class="secondary-btn" id="hintButton">💡 Indice</button>
+                <button class="secondary-btn" id="quitQuiz">Quitter</button>
+            </div>
+        </div>
+
+        <!-- Résultats -->
+        <div class="results-section hidden" id="resultsSection">
+            <div class="results-card">
+                <h2>🎉 Quiz Terminé !</h2>
+                <div class="final-score">
+                    <span id="finalScore">8</span> / <span id="finalTotal">10</span>
+                </div>
+                <div class="score-percentage" id="scorePercentage">80%</div>
+                
+                <!-- Statistiques détaillées -->
+                <div class="detailed-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Temps moyen :</span>
+                        <span class="stat-value" id="averageTime">3.2s</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Meilleure série :</span>
+                        <span class="stat-value" id="bestStreak">5</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">XP gagnés :</span>
+                        <span class="stat-value" id="xpGained">+85 XP</span>
+                    </div>
+                </div>
+                
+                <div class="performance-message" id="performanceMessage">
+                    Excellent travail !
+                </div>
+
+                <!-- Badges gagnés -->
+                <div class="badges-earned hidden" id="badgesEarned">
+                    <h3>🏆 Badges gagnés :</h3>
+                    <div id="badgesList"></div>
+                </div>
+
+                <div class="results-actions">
+                    <button class="primary-btn" id="newQuizBtn">Nouveau Quiz</button>
+                    <button class="secondary-btn" id="reviewMistakes">Revoir les erreurs</button>
+                    <button class="secondary-btn" id="viewStatsBtn">📊 Statistiques</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section de révision des erreurs -->
+        <div class="review-section hidden" id="reviewSection">
+            <div class="review-card">
+                <h2>📚 Révision des erreurs</h2>
+                <div id="mistakesList"></div>
+                <button class="primary-btn" id="backToResults">Retour aux résultats</button>
+            </div>
+        </div>
+
+        <!-- Section Statistiques -->
+        <div class="stats-section hidden" id="statsSection">
+            <div class="stats-card">
+                <h2>📊 Vos Statistiques</h2>
+                
+                <div class="profile-info">
+                    <div class="level-info">
+                        <span class="level-badge">Niveau <span id="userLevel">1</span></span>
+                        <div class="xp-bar">
+                            <div class="xp-progress" id="xpProgress"></div>
+                        </div>
+                        <span class="xp-text"><span id="currentXP">85</span> / <span id="nextLevelXP">200</span> XP</span>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Quiz terminés</h3>
+                        <span class="big-number" id="totalQuizzes">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Taux de réussite</h3>
+                        <span class="big-number" id="successRate">0%</span>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Série maximale</h3>
+                        <span class="big-number" id="maxStreak">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Hiragana maîtrisés</h3>
+                        <span class="big-number" id="masteredCount">0</span>
+                    </div>
+                </div>
+
+                <div class="hiragana-mastery">
+                    <h3>Maîtrise par hiragana</h3>
+                    <div id="masteryGrid"></div>
+                </div>
+
+                <div class="stats-actions">
+                    <button class="secondary-btn" id="resetStatsBtn">🔄 Réinitialiser</button>
+                    <button class="primary-btn" id="backFromStats">Retour</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tableau de référence -->
+        <div class="reference-section hidden" id="referenceSection">
+            <div class="reference-card">
+                <h2>📋 Tableau de Référence</h2>
+                <div class="hiragana-table" id="hiraganaTable"></div>
+                <button class="primary-btn" id="backFromReference">Retour</button>
+            </div>
+        </div>
+
+        <!-- Cartes mémoire -->
+        <div class="flashcards-section hidden" id="flashcardsSection">
+            <div class="flashcard-container">
+                <h2>🃏 Cartes Mémoire</h2>
+                <div class="flashcard" id="flashcard">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <div class="card-character">あ</div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="card-romanji">a</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flashcard-controls">
+                    <button class="secondary-btn" id="prevCard">⬅ Précédent</button>
+                    <button class="secondary-btn" id="flipCard">🔄 Retourner</button>
+                    <button class="secondary-btn" id="nextCard">Suivant ➡</button>
+                </div>
+                <div class="flashcard-progress">
+                    <span id="cardProgress">1 / 46</span>
+                </div>
+                <button class="primary-btn" id="backFromFlashcards">Retour</button>
+            </div>
+        </div>
+
+        <!-- Menu principal avec navigation -->
+        <div class="main-menu" id="mainMenu">
+            <button class="menu-btn" id="referenceBtn">📋 Tableau de Référence</button>
+            <button class="menu-btn" id="flashcardsBtn">🃏 Cartes Mémoire</button>
+            <button class="menu-btn" id="statsMenuBtn">📊 Mes Statistiques</button>
+        </div>
+    </div>
+
+    <script src="hiragana-data-fixed.js"></script>
+    <script src="script-extended.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "hiragana-learning-app",
+  "version": "1.0.0",
+  "description": "Application interactive d'apprentissage des hiragana japonais",
+  "main": "index.html",
+  "scripts": {
+    "test": "node tests.js",
+    "test-watch": "nodemon tests.js",
+    "start": "echo 'Ouvrez index.html dans votre navigateur' && start index.html"
+  },
+  "keywords": ["hiragana", "japanese", "learning", "quiz", "education"],
+  "author": "Votre Nom",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
