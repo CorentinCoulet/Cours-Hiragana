@@ -332,12 +332,31 @@ class QuizApp {
             correctAnswer = currentItem.hiragana;
             choices = generateMultipleChoices(correctAnswer, 'romanji-to-hiragana', 3, availableHiraganaData);
         }
+        // S'assurer que les choix sont uniques
+        const uniqueChoices = Array.from(new Set(choices));
+        // Si on a moins de 3 choix uniques, compléter avec d'autres distracteurs
+        while (uniqueChoices.length < 3) {
+            let pool;
+            if (currentType === 'hiragana-to-romanji') {
+                pool = HIRAGANA_DATA.map(item => item.romanji);
+            } else {
+                pool = HIRAGANA_DATA.map(item => item.hiragana);
+            }
+            // Exclure déjà présents
+            const remaining = pool.filter(val => !uniqueChoices.includes(val) && val !== correctAnswer);
+            if (remaining.length === 0) break;
+            const extra = remaining[Math.floor(Math.random() * remaining.length)];
+            uniqueChoices.push(extra);
+        }
+        // Ajouter la bonne réponse et mélanger
+        if (!uniqueChoices.includes(correctAnswer)) uniqueChoices.push(correctAnswer);
+        const finalChoices = shuffleArray(uniqueChoices).slice(0, 3);
         this.choiceButtons.forEach((btn, index) => {
-            if (index < choices.length) {
-                btn.textContent = choices[index];
+            if (index < finalChoices.length) {
+                btn.textContent = finalChoices[index];
                 btn.classList.remove('correct', 'incorrect');
                 btn.disabled = false;
-                btn.dataset.answer = choices[index];
+                btn.dataset.answer = finalChoices[index];
                 btn.style.display = 'block';
             } else {
                 btn.style.display = 'none';
